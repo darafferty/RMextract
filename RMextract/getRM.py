@@ -35,9 +35,9 @@ def getRM(MS=None,
     Returns the (timegrid,timestep,TEC) where TEC is a dictionary containing 1 enumpyarray per station in stat_names. 
     If stat_names is not given, the station names will either be extracted from the MS or st1...stN '''
 
-    print ('earth_rot', earth_rot)
-    print ('timerange ', timerange)
-    print ('use_azel ', use_azel)
+    #print ('earth_rot', earth_rot)
+    #print ('timerange ', timerange)
+    #print ('use_azel ', use_azel)
     stat_names=[]
     useEMM=False
     use_mean = False
@@ -190,6 +190,8 @@ def getRM(MS=None,
                   continue
             flags[station].append(1)   
             latpp,lonpp,height,lon,lat,am1=PosTools.getlonlatheight(az,el,position)
+            print ("lonlat",latpp,lonpp,height,lon,lat,am1,az,el)
+            print ("latarray",tecinfo[3])
             if latpp==-1 and lonpp==-1 and height==-1:
                return
             #get VTEC from IONEX interpolation

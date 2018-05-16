@@ -1,5 +1,5 @@
-import PosTools
-import getIONEX as ionex
+from RMextract import PosTools
+from RMextract import getIONEX as ionex
 import os
 import numpy as np
 from math import *
@@ -72,7 +72,7 @@ def getTEC(MS=None,
 
     #IONEX files go per day, check if more than one file is  needed.
     times,timerange=PosTools.getIONEXtimerange(timerange,timestep)
-    times.append(np.arange(timerange[0],timerange[1]+timestep,timestep)) #add one extra step to make sure you have a value for all times in the MS in case timestep hase been changed
+    #times[-1].append(np.arange(timerange[0],timerange[1]+timestep,timestep)) #add one extra step to make sure you have a value for all times in the MS in case timestep hase been changed
     timegrid=np.array([])
     TECs={};
     ams={};
@@ -81,6 +81,7 @@ def getTEC(MS=None,
         TECs[st]=[]
         ams[st]=[]
         flags[st]=[]
+    print ("getting", times)
     for time_array in times:
         #get RM per timeslot
         starttime=time_array[0];
