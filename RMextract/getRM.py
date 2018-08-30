@@ -17,8 +17,7 @@ import math
 def getRM(*args,**kwargs):
     
     '''Dummy function for compatibility'''
-    logging.warning("getRM is depreciated, please use extract(\"RM"\") \
-    instead")
+    logging.warning("getRM is depreciated, please use extract(\"RM\") instead")
     RMextract.extract("RM",*args,**kwargs)
     
 

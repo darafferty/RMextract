@@ -527,8 +527,6 @@ def getIONEXfile(time="2012/03/23/02:20:10.01",
                  overwrite=False):
     getIONEXfile.__doc__ = _get_IONEX_file.__doc__
     return _get_IONEX_file(time, server, prefix, outpath, overwrite)
-<<<<<<< HEAD
-=======
 
 def get_TEC_data(times, lonlatpp, server, prefix, outpath, use_filter=None,earth_rot=0.):
     '''Returns vtec for given times and lonlats.

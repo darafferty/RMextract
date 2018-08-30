@@ -31,7 +31,6 @@ EMM/GeomagnetismHeader.h
 EMM/GeomagnetismLibrary.c
 EMM/WMM.COF
 EMM/__init__.py
-RMextract/Extract.py
 RMextract/PosTools.py
 RMextract/__init__.py
 RMextract/getIONEX.py

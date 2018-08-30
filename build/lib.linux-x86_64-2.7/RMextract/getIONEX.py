@@ -460,22 +460,13 @@ def _get_IONEX_file(time="2012/03/23/02:20:10.01",
         day = time[2]
     mydate = datetime.date(year, month, day)
     dayofyear = mydate.timetuple().tm_yday
-    ftpserver = server.strip("ftp:://").split("/")[0]
-    ftppath = "/".join(server.strip("ftp:://").split("/")[1:])
-    try_again=True
-    nr_tries=0
-    while try_again and nr_tries<10:
-        ftp = ftplib.FTP(ftpserver)
-        try:
-            ftp.login()
-            try_again = False
-        except ftplib.error_perm:
-            ftp.login("data-out", "Qz8803#mhR4z")
-            try_again = False
-        except ftplib.error_temp:
-            try_again = True
-        ftp.close()
-        nr_tries += 1
+    ftpserver = server.strip("ftp:").strip("/").split("/")[0]
+    ftppath = "/".join(server.strip("ftp:").strip("/").split("/")[1:])
+    ftp = ftplib.FTP(ftpserver)
+    try:
+        ftp.login()
+    except ftplib.error_perm:
+        ftp.login("data-out", "Qz8803#mhR4z")
     ftp.cwd(ftppath)
     totpath = ftppath
     myl = []
@@ -495,7 +486,8 @@ def _get_IONEX_file(time="2012/03/23/02:20:10.01",
     logging.info("Retrieving data from %s", totpath)
     myl = []
     ftp.retrlines("NLST", myl.append)
-    filenames = [i for i in myl if (prefix.lower() in i.lower()) and
+    filenames = [i for i in myl if (prefix.lower() in i.lower()) and 
+                 ("%03d"%dayofyear in i.lower()) and
                  (i.lower().endswith("i.z") or i.lower().endswith("i"))]
     logging.info(" ".join(filenames))
     assert len(filenames) > 0, "No files found on %s for %s" % (server,
@@ -526,7 +518,7 @@ def _get_IONEX_file(time="2012/03/23/02:20:10.01",
     else:
         nfilenames = _store_files(ftp, filenames, outpath, overwrite)
         return nfilenames[0]
-    ftp.quit()
+
 
 def getIONEXfile(time="2012/03/23/02:20:10.01",
                  server="ftp://cddis.gsfc.nasa.gov/gnss/productsionex/",

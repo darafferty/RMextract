@@ -12,4 +12,4 @@ def getTEC(*args, **kwargs):
     '''dummy function for compatibility'''
     logging.warning("getTEC is depreciated, please use extract(\"TEC\") \
     instead")
-    RMextract.extract("TEC", *args, **kwargs)
+    RMextract.extract("TEC", **kwargs)
