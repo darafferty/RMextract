@@ -1,0 +1,89 @@
+Ionospheric measurements using a LOFAR
+
+Although the ionosphere mainly proves a nuisance for radio astronomy at low
+frequencies, radio interferometric instruments can also be used to probe the
+structure of the ionosphere. It is well known that the amount of disturbance
+of an electromagnetic signal due to the ionospheric plasma scales with the
+wavelength of the signal. With LOFAR's low frequencies we are able to detect
+effects that are not seen by instruments operating at higher frequencies, such
+as GNSS.
+
+LOFAR is a large low frequency telescope, with a dense core of 24 stations
+distributed within a 3 km diameter circle in the East of the
+Netherlands. Another 14 Dutch stations have baselines up to 100 km, whereas 13
+international stations are distributed over many countries in Europe. Each
+stations consists of many antennas of two different types, the low band
+antennas (LBA) with a frequency range between 30 and 80 MHz and the high band
+(HBA) with the possibility to measure between 110 and 240MHz. The data of a
+single station are added with appropriate delays to form a station beam in a
+particular direction. These data can be used to produce dynamic spectra with
+high time (sub second) and frequency (0.2 MHz) resolution.  In interferometric
+mode, the data of all stations are correlated to create visibilities with
+highest resolution of 1s, 3kHz. Typically, after flagging for RFI, these data
+are processed at lower resolution.
+
+With the LOFAR telescope we gain insight on the ionosphere in various
+ways. Since ionospheric diffractive delays are a main source of calibration
+errors, calibration parameters give a direct measure of the differential
+integrated electron content over the array. Amplitude scintillation can be
+measured with single station data and moving scintillation patterns are
+observed if the data of more stations is combined.  Also, dual polarization
+elements allow the measurement of rotation of the polarization angle of a
+linear polarized signal due to the interaction with the ionospheric plasma and
+the Earth magnetic field, known as Faraday rotation. Interestingly, even an
+unpolarized signal can become artificially polarized if the Faraday rotation
+effect above the two arms of an interferometric differ.
+
+We have used the station beam data to find ionospheric scintillation patterns
+of a bright astronomical source, such as Cas A. Comparing the scintillation
+amplitudes of several stations, one gets a direct view of the patterns in the
+ionosphere at the station positions projected along the line of sight. Imaging
+these patterns in time this gives a movie of the ultra fine structures in
+the ionosphere, moving around above the LOFAR core. Although at midlattitude,
+at these frequencies amplitude scintillation is observed almost continuously,
+contrary to what has been observed with GNSS measurements at higher
+frequencies (R. A. Fallows et al, 2016 ApJL 828 L7).
+
+In interferometric mode, the data of all stations are correlated and averaged
+to typical 1 second time resolution. Since, in this mode the system is only
+sensitive to the phase difference of a signal arriving at two stations, the
+measured ionospheric effects are also mainly differential.  A linear gradient
+in ionospheric TEC over the array will cause a (frequency dependent) shift of
+the measured position of a source. Higher order terms will cause the source to
+be deformed in the image plane.  Typically, the ionospheric variation in a
+single direction can be described by a linear gradient for the LOFAR core,
+where higher order terms show up at longer baselines. When imaging the
+position shifts of a large number of sources inside the LOFAR beam as a vector
+field, larger scale disturbances, like TIDs or duct like structures (e.g. Loi, S. T., et al. (2016), J. Geophys. Res. Space Physics, 121, 1569–1586), become visible over an area corresponding to the LOFAR beam. Although a
+single pointing of the LOFAR HBA beam only corresponds to about 10 degrees,
+and therefore to about 50 square km at an altitude of 300 km, it is possible
+to use LOFAR in simultaneous multi beaming mode, sacrificing bandwidth for more
+pointings.  In order to have enough S/N to measure the positions of hundreds
+of sources with high enough accuracy, the time cadence of movies made in this
+mode is typically 1 minute.
+
+During calibration, station based phase errors are estimated by comparing a
+model of the sources in the sky (usually a calibrator, a bright source in the
+center of the beam) to the actual data. The ionospheric effects are separated
+from other (instrumental) phase effects by making use of the wide bandwidth
+and the typical frequency behavior of ionospheric delay. To first order the
+ionospheric phase errors go with freq^-1, although at the lowest LOFAR
+frequencies (<40 MHz) third order frequency effects (freq^-3) become
+visible. Since phase errors can be measured with very high accuracy, LOFAR is
+able to measure differential integrated total electron content (TEC) with an
+accuracy smaller than 1 milliTECU (10^13 e-/m^2), using a typical HBA
+calibrator observation with 10s integration. Using the phase solutions in the
+direction of a single calibrator, we measure the differential TEC on an area
+in the ionosphere equal to the footprint of LOFAR. (Mevius et al, 2016, Radio
+Sci. 51, 927–941) 
+The second order phase delay effect, Faraday rotation, scaling with (freq^-2),
+causes a phase delay of circular polarized signals like GNSS. At LOFAR it
+becomes visible as a rotation of the linear polarization angle. Given an Earth
+magnetic field model, the measured time varying rotation angle of a polarized
+source can give a direct measure of the absolute TEC (Sotomayor-Beltran C. et al 2013 A&A 552 A58). But even for an unpolarized source
+the effect is visible if the ionospheric Faraday rotation angle above the
+stations of a baseline differ, either because of differential TEC, or a
+slightly different parallel magnetic field vector. In a recent paper we show
+all three orders ofionospheric phase effects in LBA calibrator data (de
+Gasperin et al, 2018, A&A,  https://doi.org/10.1051/0004-6361/201833012).
+

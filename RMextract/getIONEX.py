@@ -460,8 +460,8 @@ def _get_IONEX_file(time="2012/03/23/02:20:10.01",
         day = time[2]
     mydate = datetime.date(year, month, day)
     dayofyear = mydate.timetuple().tm_yday
-    ftpserver = server.strip("ftp:://").split("/")[0]
-    ftppath = "/".join(server.strip("ftp:://").split("/")[1:])
+    ftpserver = server.strip("ftp:").strip("/").split("/")[0]
+    ftppath = "/".join(server.strip("ftp:").strip("/").split("/")[1:])
     ftp = ftplib.FTP(ftpserver)
     try:
         ftp.login()
@@ -486,7 +486,8 @@ def _get_IONEX_file(time="2012/03/23/02:20:10.01",
     logging.info("Retrieving data from %s", totpath)
     myl = []
     ftp.retrlines("NLST", myl.append)
-    filenames = [i for i in myl if (prefix.lower() in i.lower()) and
+    filenames = [i for i in myl if (prefix.lower() in i.lower()) and 
+                 ("%03d"%dayofyear in i.lower()) and
                  (i.lower().endswith("i.z") or i.lower().endswith("i"))]
     logging.info(" ".join(filenames))
     assert len(filenames) > 0, "No files found on %s for %s" % (server,
@@ -526,3 +527,41 @@ def getIONEXfile(time="2012/03/23/02:20:10.01",
                  overwrite=False):
     getIONEXfile.__doc__ = _get_IONEX_file.__doc__
     return _get_IONEX_file(time, server, prefix, outpath, overwrite)
+<<<<<<< HEAD
+=======
+
+def get_TEC_data(times, lonlatpp, server, prefix, outpath, use_filter=None,earth_rot=0.):
+    '''Returns vtec for given times and lonlats.
+    If times has the same length as the first axis  of lonlatpp, 
+    it is assumed that there is a one to one correspondence.
+    Else vTEC is calculated for every combination of lonlatpp and times.
+    
+    Args:
+        times (np.array) : float of time in MJD seconds
+        lonlatpp (np.array) : array of time X 2 ,longitude lattitude of 
+                              piercepoints
+        server (string) : ftp server to get IONEX data from
+        prefix (string) : prefix of IONEX data 
+        outpath (string) : local location of the IONEX files
+    Returns:
+        np.array : array with shape times.shape x lonlatpp.shape[0], unless both
+                   are equal
+    '''
+    
+    date_parms = PosTools.obtain_observation_year_month_day_fraction(times[0])
+    ionexf=get_IONEX_file(time=date_parms,server=server,prefix=prefix,outpath=outpath)
+    tecinfo=ionex.readTEC(ionexf,use_filter=use_filter)
+    latpp = lonlatpp[:, 1]
+    lonpp = lonlatpp[:, 0]
+    if latpp.shape == times.shape:
+        vtec = compute_tec_interpol(times,lat=latpp,lon=lonpp,tecinfo=tecinfo,apply_earth_rotation=earth_rot)
+    else:
+        vtec=[]
+        for itime in range(times.shape[0]):
+            vtec.append(compute_tec_interpol(times[itime]*np.ones_like(latpp),
+                                             lat=latpp,
+                                             lon=lonpp,
+                                             tecinfo=tecinfo,
+                                             apply_earth_rotation=earth_rot))
+    return np.array(vtec)
+            
