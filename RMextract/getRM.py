@@ -23,16 +23,16 @@ def getRM(MS=None,
            **kwargs):
     '''optional arguments are:
     radec or pointing : [ra,dec] in radians, or if use_azel =True, az + el in radians,
-    timestep in s, timerange = [start, end]in MJD seconds, 
+    timestep in s, timerange = [start, end]in MJD seconds,
     otherwise use start_time/end_time (casa timestring,eg. 2012/11/21/12:00:00  or 56252.5d  NEEDS PYRAP) ,
-    stat_names = list of strings per station, 
+    stat_names = list of strings per station,
     stat_positions = list of length 3 numpy arrays, containing station_position in ITRF meters.
     useEMM = boolean, use EMM for Earth magnetic field, otherwise WMM cooefficients will be used.
     out_file = string, if given the data points will be written to a text file.
     use_mean = True if you only want report for mean of station positions
-    use_filter =standard deviation,or list of standard deviations (time,long, lat) to gaussian filter TEC data 
+    use_filter =standard deviation,or list of standard deviations (time,long, lat) to gaussian filter TEC data
     TIME_OFFSET = float, offset time at start and end to ensure all needed values are calculated,
-    Returns the (timegrid,timestep,TEC) where TEC is a dictionary containing 1 enumpyarray per station in stat_names. 
+    Returns the (timegrid,timestep,TEC) where TEC is a dictionary containing 1 enumpyarray per station in stat_names.
     If stat_names is not given, the station names will either be extracted from the MS or st1...stN '''
 
     #print ('earth_rot', earth_rot)
@@ -51,7 +51,7 @@ def getRM(MS=None,
     if not (MS is None):
 
       (timerange,timestep,pointing,stat_names,stat_pos)=PosTools.getMSinfo(MS);
-    
+
     for key in kwargs.keys():
         if key=='use_mean':
             use_mean = kwargs[key]
@@ -81,14 +81,14 @@ def getRM(MS=None,
                 stat_names =['st%d'%(i+1) for i in range(len(stat_pos))]
         if key=='useEMM':
             useEMM=kwargs[key]
-	if key=="proxy_server":		#Check to see if user wants to use a proxy for downloading IONEX files.
-	    use_proxy = True
-	    proxy_server=kwargs["proxy_server"]
-	    proxy_type=kwargs["proxy_type"]
-	    proxy_port=kwargs["proxy_port"]
-	    proxy_user=kwargs["proxy_user"]
-            proxy_pass=kwargs["proxy_pass"]
-      
+    if key=="proxy_server":     #Check to see if user wants to use a proxy for downloading IONEX files.
+        use_proxy = True
+        proxy_server=kwargs["proxy_server"]
+        proxy_type=kwargs["proxy_type"]
+        proxy_port=kwargs["proxy_port"]
+        proxy_user=kwargs["proxy_user"]
+        proxy_pass=kwargs["proxy_pass"]
+
     if timerange != 0:
       start_time = timerange[0]
       end_time = timerange[1]
@@ -101,13 +101,13 @@ def getRM(MS=None,
         timerange,str_start_time,reference_time=PosTools.get_time_range(start_time,end_time,timestep,time_in_sec,0)
     if str_start_time==-1:
        return
-        
+
     if useEMM:
         #print ("USING EMM for EarthMagnetic Field")
         emm=EMM.EMM()
     else:
         emm=EMM.WMM()
-    
+
     times,timerange=PosTools.getIONEXtimerange(timerange,timestep)
     if len(times[-1])==0 or times[-1][-1]<timerange[1]:
         timestmp=list(times[-1])
@@ -155,19 +155,19 @@ def getRM(MS=None,
         starttime=time_array[0]
         #print ("getting ionexfile for",starttime)
         date_parms =  PosTools.obtain_observation_year_month_day_fraction(starttime)
-        dayofyear = date(date_parms[0],date_parms[1],date_parms[2]).timetuple().tm_yday  
+        dayofyear = date(date_parms[0],date_parms[1],date_parms[2]).timetuple().tm_yday
         emm.date=date_parms[0]+float(dayofyear)/365.
         #get relevant ionex file
-	if not use_proxy:
+        if not use_proxy:
             if not "http" in server: #ftp server use ftplib
-	        ionexf=ionex.getIONEXfile(time=date_parms,server=server,prefix=prefix,outpath=ionexPath)
+                ionexf=ionex.getIONEXfile(time=date_parms,server=server,prefix=prefix,outpath=ionexPath)
             else:
                 ionexf=ionex.get_urllib_IONEXfile(time=date_parms,server=server,prefix=prefix,outpath=ionexPath)
-	else:
-		ionexf=ionex.get_urllib_IONEXfile(time=date_parms,server=server,prefix=prefix,outpath=ionexPath,proxy_server=proxy_server,proxy_type=proxy_type,proxy_port=proxy_port,proxy_user=proxy_user,proxy_pass=proxy_pass)
+        else:
+            ionexf=ionex.get_urllib_IONEXfile(time=date_parms,server=server,prefix=prefix,outpath=ionexPath,proxy_server=proxy_server,proxy_type=proxy_type,proxy_port=proxy_port,proxy_user=proxy_user,proxy_pass=proxy_pass)
 
         assert (ionexf!=-1),"error getting ionex data"
-           
+
         tecinfo=ionex.readTEC(ionexf,use_filter=use_filter)
         if use_mean:
           if not stat_pos_mean:
@@ -178,15 +178,15 @@ def getRM(MS=None,
             #print ('stat_pos.mean', stn_mean)
         for station,position in  zip(stat_names,stat_pos):
           #print ('generating data for station ', station)
- 
-          
+
+
           for time in time_array:
             result =  PosTools.obtain_observation_year_month_day_fraction(time)
             part_of_day= result[3] * 24
             if use_azel:
               az = pointing[0]
               el = pointing[1]
-              flags[station].append(1)   
+              flags[station].append(1)
             else:
                az,el = PosTools.getAzEl(pointing,time,position,ha_limit)
                if az==-1 and el==-1:
@@ -202,7 +202,7 @@ def getRM(MS=None,
                   TECs[station].append(-999)  #sTEC value
                   flags[station].append(0)
                   continue
-            flags[station].append(1)   
+            flags[station].append(1)
             latpp,lonpp,height,lon,lat,am1=PosTools.getlonlatheight(az,el,position)
 
             if latpp==-1 and lonpp==-1 and height==-1:
@@ -227,21 +227,21 @@ def getRM(MS=None,
           if use_mean:
             break
 
-            
+
         timegrid=np.concatenate((timegrid,time_array));
-    
+
     for st in stat_names:
-      air_mass[station] = np.array(air_mass[st])
-      azimuth[station] = np.array(azimuth[st])
-      elevation[station] = np.array(elevation[st])
+      air_mass[st] = np.array(air_mass[st])
+      azimuth[st] = np.array(azimuth[st])
+      elevation[st] = np.array(elevation[st])
       TECs[st]=np.array(TECs[st])
       Bs[st]=np.array(Bs[st])
       Bpars[st]=np.array(Bpars[st])
-      RMs[st]=np.array(RMs[st]) 
+      RMs[st]=np.array(RMs[st])
       flags[st]=np.array(flags[st])
       if use_mean:
         break
-       
+
     big_dict={}
     big_dict['STEC']=TECs
     big_dict['Bpar']=Bpars
@@ -249,13 +249,13 @@ def getRM(MS=None,
     big_dict['AirMass']=air_mass
     big_dict['elev']=elevation
     big_dict['azimuth']=azimuth
-    big_dict['RM']=RMs 
+    big_dict['RM']=RMs
     big_dict['times']=timegrid
     big_dict['timestep']=timestep
     big_dict['station_names'] = stat_names
     big_dict['stat_pos'] = stat_pos
     big_dict['flags'] = flags
-    big_dict['reference_time'] = reference_time 
+    big_dict['reference_time'] = reference_time
     # finish writing computed data to report
     if len(out_file):
        time_range=[big_dict['times'][0],big_dict['times'][-1]]
@@ -289,7 +289,7 @@ def getRM(MS=None,
            az = big_dict['azimuth'][key][i]
            rel_time = timegrid[i] - reference_time
            if i  == 0:
-             time_width = reference_time - timegrid[i] 
+             time_width = reference_time - timegrid[i]
            else:
              time_width = timegrid[i] - timegrid[i-1]
            log.write("%s : %s %s %s %s %s %s %s %s\n" % (seq_no, ok, rel_time, time_width, el, az, stec, rm, vtec_factor))
