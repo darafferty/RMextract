@@ -630,7 +630,8 @@ def get_urllib_IONEXfile(time="2012/03/23/02:20:10.01",
     serverfound=False
     backupfound=False
     #If proxy url is given, enable proxy using pysocks
-    import urllib2
+#     import urllib2
+    from urllib.request import urlopen
     if proxy_server and ("None" not in proxy_server):
         import socket
         import socks
@@ -646,11 +647,11 @@ def get_urllib_IONEXfile(time="2012/03/23/02:20:10.01",
     #try primary url
 
     try:
-        primary = urllib2.urlopen(server,timeout=30)
+        primary = urlopen(server,timeout=30)
         serverfound = True
     except:
         try:
-            secondary = urllib2.urlopen(backupserver,timeout=30)
+            secondary = urlopen(backupserver,timeout=30)
             backupfound = True
             server=backupserver
         except:
@@ -665,7 +666,7 @@ def get_urllib_IONEXfile(time="2012/03/23/02:20:10.01",
     # Download IONEX file, make sure it is always uppercase
     fname = outpath+'/'+(url.split('/')[-1]).upper()
     try:
-        site = urllib2.urlopen(url,timeout=30)
+        site = urlopen(url,timeout=30)
     except:
         logging.info("No files found on %s for %s",server,fname)
         return -1
