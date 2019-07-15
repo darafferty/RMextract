@@ -635,12 +635,12 @@ def get_urllib_IONEXfile(time="2012/03/23/02:20:10.01",
     if proxy_server and ("None" not in proxy_server):
         import socket
         import socks
-    s = socks.socksocket()
-    if proxy_type=="socks4":
-        ProxyType = socks.SOCKS4
-    if proxy_type=="socks5":
-        ProxyType = socks.SOCKS5
-    s.set_proxy(ProxyType, proxy_server, proxy_port, rdns=True, username=proxy_user, password=proxy_pass)
+        s = socks.socksocket()
+        if proxy_type=="socks4":
+            ProxyType = socks.SOCKS4
+        if proxy_type=="socks5":
+            ProxyType = socks.SOCKS5
+        s.set_proxy(ProxyType, proxy_server, proxy_port, rdns=True, username=proxy_user, password=proxy_pass)
 
     # Url of the primary server has the syntax "ftp://ftp.aiub.unibe.ch/CODE/YYYY/CODGDOY0.YYI.Z" where DOY is the day of the year, padded with leading zero if <100, and YY is the last two digits of year.
     # Url of the backup server has the syntax "ftp://cddis.gsfc.nasa.gov/gnss/products/ionex/YYYY/DOY/codgDOY.YYi.Z where DOY is the day of the year, padded with leading zero if <100, and YY is the last two digits of year.
